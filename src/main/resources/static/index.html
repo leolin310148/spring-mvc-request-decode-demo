@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+    <script src="webjars/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+
+<div>
+
+    <input type="text" id="name-input" value="Leo"/>
+    <button id="sendRequestParam">Send Request Param</button>
+    <button id="sendBody">Send Body</button>
+
+    <div id="display">
+
+    </div>
+</div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+
+    $('#sendRequestParam').click(function () {
+        var $display = $('#display');
+        $display.html('');
+        const name = btoa($('#name-input').val());
+        var str = "request param: name = " + name + '<br>';
+        $.getJSON("/api/name?name=" + name).then(function (res) {
+            str += "response: <br>" + JSON.stringify(res);
+            $display.html(str);
+        });
+    });
+
+
+    $('#sendBody').click(function () {
+        var $display = $('#display');
+        $display.html('');
+        const body = btoa(JSON.stringify({name: $('#name-input').val()}));
+        var str = "request body: " + body + '<br>';
+        $.ajax({
+            url: "/api/name",
+            method: 'post',
+            data: body,
+            contentType: 'application/json',
+            dataType: 'json',
+        }).then(function (res) {
+            str += "response: <br>" + JSON.stringify(res);
+            $display.html(str);
+        });
+    });
+
+
+</script>
